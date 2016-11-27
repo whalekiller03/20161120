@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Rubik');
+        @import url(http://fonts.googleapis.com/earlyaccess/notosanstc.css);
+        *{
+            box-sizing: border-box;
+            font-family: "Rubik","Noto Sans TC",sans-serif;
+        }
+        .container{
+            
+            margin:auto;
+            margin-bottom: 20px;
+            background: url(101.jpg) no-repeat;
+            
+        }
+        .item {
+            width: 680px;
+            margin: auto;
+            padding: 30px;
+            background-color: #fff;
+            border: 1px solid #aaa;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.8);
+            vertical-align: top;
+        }
+        h1{
+            text-align: center;
+            color: white;
+            padding-top: 20px;
+        }
+        h2{
+            float: left;
+            margin-right: 50px;
+            line-height: 20px;
+        }
+        p{
+            float:left;
+            margin-left: 50px;
+            vertical-align: top;
+            text-align: center;
+            line-height: 20px;
+        }
+        p.max{
+            color: red;
+        }
+        
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>         
+    <script>
+        $(function(){
+            var url ="http://api.openweathermap.org/data/2.5/forecast/daily?q=Taipei&units=metric&cnt=7&lang=zh_Tw&appid=3e99cba2ba502b9839874b085aee7d99";
+            $.ajax({
+                url:url,
+                dataType:"json",
+                success:function(e){
+                    //全部裡面的list
+                    $(e.list).each(function(){
+                        var myDate =new Date(this.dt*1000);  //轉換時間就需要放括號內
+                        var YYYY = myDate.getFullYear();
+                        var MM = myDate.getMonth()+1; //陣列+1
+                        var DD = myDate.getDate();
+                        var d = myDate.getDay(); //從星期一開始
+                        var day =["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+                        var imgPath = "http://openweathermap.org/img/w/";
+                        
+                        var c = "<div class=\"item\">";
+                        c+="<h2>"+YYYY+"/"+MM+"/"+DD+" "+day[d]+"</h2>";
+                        c+="<p class='max'>"+parseInt(this.temp.max)+" ℃</p>"
+                        c+="<p>"+parseInt(this.temp.min)+" ℃</p>"
+                        c+="<p>"+this.weather[0].description+"</p>"
+                        c+="<img src='"+imgPath+this.weather[0].icon+".png'>"
+                        c+="</div>"
+//                        var c ="<h1>"+this.dt+"</h1>";
+                        $(".container").append(c);
+                        
+                    })
+                },
+                error:function(){
+                    console.log("error");
+                }
+            })
+        })
+    </script>
+
+</head>
+<body>
+   <div class="container">
+       <h1>台北天氣圖</h1>
+   </div>
+       
+   
+</body>
+</html>
